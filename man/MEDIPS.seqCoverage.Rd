@@ -1,0 +1,60 @@
+\name{MEDIPS.seqCoverage}
+\alias{MEDIPS.seqCoverage}
+\title{
+The function identifies the number of CpGs (or any other predefined sequence pattern) covered by the given short reads.
+}
+\description{
+The main idea of the sequence pattern coverage analysis is to test the number of CpGs (or any other predefined sequence pattern) covered by the given short reads and to test the depth of coverage.
+}
+\usage{
+MEDIPS.seqCoverage(file = NULL, BSgenome = NULL, pattern = "CG", extend = 0, shift = 0, uniq = 1e-3, chr.select = NULL, paired = F, isSecondaryAlignment = FALSE, simpleCigar=TRUE)
+}
+\arguments{
+ \item{file}{
+Path and file name of the input data
+}
+ \item{BSgenome}{
+The reference genome name as defined by BSgenome 
+}
+ \item{pattern}{
+defines the sequence pattern, e.g. CG for CpGs.
+} 
+  \item{extend}{
+defines the number of bases by which the region will be extended before the genome vector is calculated.
+Regions will be extended along the plus or the minus strand as defined by their provided strand information.
+Please note, the extend and shift parameter are mutual exclusive.
+}
+  \item{shift}{
+defines the number of bases by which the region will be shifted before the genome vector is calculated.
+Regions will be shifted along the plus or the minus strand as defined by their provided strand information.
+Please note, the extend and shift parameter are mutual exclusive.
+}
+  \item{uniq}{
+The uniq parameter determines, if all reads mapping to exactly the same genomic position should be kept (uniq = 0), replaced by only one representative (uniq = 1), or if the number of stacked reads should be capped by a maximal number of stacked reads per genomic position determined by a poisson distribution of stacked reads genome wide and by a given p-value (1 > uniq > 0) (deafult: 1e-3). The smaller the p-value, the more reads at the same genomic position are potentially allowed.
+}
+  \item{chr.select}{
+specify a subset of chromosomes for which the saturation analysis is performed.
+}
+\item{paired}{
+option for paired end reads
+}
+\item{isSecondaryAlignment}{
+option to import only primary alignments.
+}
+\item{simpleCigar}{
+option to import only alignments with simple Cigar string.
+}
+}
+\author{
+Lukas Chavez
+}
+\examples{
+
+library(MEDIPSData)
+library(BSgenome.Hsapiens.UCSC.hg19)
+bam.file.hESCs.Rep1.MeDIP = system.file("extdata", "hESCs.MeDIP.Rep1.chr22.bam", package="MEDIPSData")
+
+cr = MEDIPS.seqCoverage(file=bam.file.hESCs.Rep1.MeDIP, BSgenome="BSgenome.Hsapiens.UCSC.hg19", pattern="CG", extend=250, shift=0, uniq=1e-3, chr.select="chr22")
+
+}
+
